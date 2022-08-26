@@ -29,9 +29,9 @@ const config = {
     styledComponents: true,
   },
   experimental: {
-    scrollRestoration: true,
     images: {
       allowFutureImage: true,
+      unoptimized: true,
     },
   },
   reactStrictMode: true,

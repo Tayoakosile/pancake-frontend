@@ -1,25 +1,17 @@
 import { ResetCSS } from '@pancakeswap/uikit'
-import Script from 'next/script'
-import dynamic from 'next/dynamic'
 import BigNumber from 'bignumber.js'
 import GlobalCheckClaimStatus from 'components/GlobalCheckClaimStatus'
+import { NetworkModal } from 'components/NetworkModal'
 import { FixedSubgraphHealthIndicator } from 'components/SubgraphHealthIndicator/FixedSubgraphHealthIndicator'
 import { ToastListener } from 'contexts/ToastsContext'
-import useEagerConnect from 'hooks/useEagerConnect'
-import useEagerConnectMP from 'hooks/useEagerConnect.bmp'
-import { useAccountEventListener } from 'hooks/useAccountEventListener'
-import useSentryUser from 'hooks/useSentryUser'
-import useUserAgent from 'hooks/useUserAgent'
-import useThemeCookie from 'hooks/useThemeCookie'
+import { NextPage } from 'next'
 import type { AppProps } from 'next/app'
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
+import Script from 'next/script'
 import { Fragment } from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
-import { useStore, persistor } from 'state'
-import { NetworkModal } from 'components/NetworkModal'
-import { usePollBlockNumber } from 'state/block/hooks'
-import { usePollCoreFarmData } from 'state/farms/hooks'
-import { NextPage } from 'next'
+import { persistor, useStore } from 'state'
 import { Blocklist, Updaters } from '..'
 import { ErrorBoundary } from '../components/ErrorBoundary'
 import Menu from '../components/Menu'
@@ -35,23 +27,10 @@ BigNumber.config({
 })
 
 function GlobalHooks() {
-  usePollBlockNumber()
-  useEagerConnect()
-  usePollCoreFarmData()
-  useUserAgent()
-  useAccountEventListener()
-  useSentryUser()
-  useThemeCookie()
   return null
 }
 
 function MPGlobalHooks() {
-  usePollBlockNumber()
-  useEagerConnectMP()
-  usePollCoreFarmData()
-  useUserAgent()
-  useAccountEventListener()
-  useSentryUser()
   return null
 }
 

@@ -1,7 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ChainId } from '@pancakeswap/sdk'
+// import { useCustomHooks } from ''
+
 import {
   Box,
+  Button,
   Flex,
   LogoutIcon,
   RefreshIcon,
@@ -11,10 +14,10 @@ import {
   UserMenuItem,
   UserMenuVariant,
 } from '@pancakeswap/uikit'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import Trans from 'components/Trans'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
+import useCustomHook from 'hooks/useCustomHook'
 import NextLink from 'next/link'
 import { useEffect, useState } from 'react'
 import { useProfile } from 'state/profile/hooks'
@@ -25,6 +28,7 @@ import WalletModal, { WalletView } from './WalletModal'
 import WalletUserMenuItem from './WalletUserMenuItem'
 
 const UserMenu = () => {
+  const { handleClick, buttonText } = useCustomHook()
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { chainId, isWrongNetwork } = useActiveChainId()
@@ -104,14 +108,14 @@ const UserMenu = () => {
   }
 
   return (
-    <ConnectWalletButton scale="sm">
+    <Button onClick={() => handleClick()}>
       <Box display={['none', , , 'block']}>
-        <Trans>Connect Wallet</Trans>
+        <Trans>{buttonText}</Trans>
       </Box>
       <Box display={['block', , , 'none']}>
-        <Trans>Connect</Trans>
+        <Trans>{buttonText.includes('Connected') ? 'Connected' : 'Connect'}</Trans>
       </Box>
-    </ConnectWalletButton>
+    </Button>
   )
 }
 
