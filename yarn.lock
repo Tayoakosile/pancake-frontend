@@ -10390,6 +10390,13 @@ eth-sig-util@^1.4.2:
     ethereumjs-abi "git+https://github.com/ethereumjs/ethereumjs-abi.git"
     ethereumjs-util "^5.1.1"
 
+ether-converter@^0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/ether-converter/-/ether-converter-0.0.16.tgz#d79544510b7850e3b98487fad75d6433d1ae1cec"
+  integrity sha512-YpGJjav41wYvwnD7w6ob8Vgp6e0Xd52mlK6hHm5Euxdhh+cbqa2mDXTqFLdRiihLLdWT6G65lbh6OB6bW8++0w==
+  dependencies:
+    bignumber.js "^8.0.1"
+
 ethereum-common@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/ethereum-common/-/ethereum-common-0.2.0.tgz#13bf966131cce1eeade62a1b434249bb4cb120ca"

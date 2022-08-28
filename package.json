@@ -65,6 +65,7 @@
     "date-fns": "^2.21.3",
     "easymde": "^2.16.1",
     "eth-gasprice-estimator": "^1.0.0",
+    "ether-converter": "^0.0.16",
     "ethereum-unit-converter": "^0.0.17",
     "fast-json-stable-stringify": "^2.1.0",
     "firebase": "^9.9.3",
